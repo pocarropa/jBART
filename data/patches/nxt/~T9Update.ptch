@@ -1,0 +1,4 @@
+appfile <ContactsProvider.apk>;
+#mapping "%here%/proguard.map";
+copyfile "%here%/T9Utils.smali" "%smali%/com/android/providers/contacts/t9/T9Utils.smali";
+copyfile "%here%/T9MultiUtils.smali" "%smali%/com/android/providers/contacts/t9/T9MultiUtils.smali";
