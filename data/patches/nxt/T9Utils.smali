@@ -6,9 +6,73 @@
 # static fields
 .field public static final COLUMNS:[Ljava/lang/String;
 
+.field public static final CONTACT_ID:I = 0x1
+
 .field public static final CREATE_STATEMENTS:[Ljava/lang/String;
 
+.field public static final DATA:I = 0x3
+
+.field public static final DATA_ID:I = 0x0
+
+.field public static final DATA_TAG:I = 0xb
+
+.field public static final DBG:Z = false
+
+.field public static final DELETE_ALL_STATEMENTS:Ljava/lang/String; = "DELETE FROM t9_lookup"
+
+.field public static final DISPLAY_NAME:I = 0x5
+
+.field private static final FIRST_PINYIN_SYMBOL_LOWERCASE:C = 'a'
+
+.field private static final FIRST_PINYIN_SYMBOL_UPPERCASE:C = 'A'
+
+.field private static final FIRST_ZHUYIN_SYMBOL:C = '\u3105'
+
+.field public static final INSERT_STATEMENT:Ljava/lang/String; = "INSERT OR IGNORE INTO t9_lookup(data_id,contact_id,raw_contact_id,data,normalized_data,display_name,photo_id,times_contacted,t9_key,display_string,data_tag,key_type) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+
 .field public static final ITEM_QUERY_SQLS:[Ljava/lang/String;
+
+.field public static final KEY_TYPE:I = 0xa
+
+.field private static final LAST_PINYIN_SYMBOL_LOWERCASE:C = 'z'
+
+.field private static final LAST_PINYIN_SYMBOL_UPPERCASE:C = 'Z'
+
+.field private static final LAST_ZHUYIN_SYMBOL:C = '\u3129'
+
+.field public static final LOG_TAG:Ljava/lang/String; = "T9"
+
+.field public static final MATCH_STRING:I = 0x9
+
+.field public static final MAX_KEY_LENGTH:I = 0x100
+
+.field public static final NORMALIZED_DATA:I = 0x4
+
+.field public static final PERFORMANCE_DBG:Z = false
+
+.field public static final PHOTO_ID:I = 0x6
+
+.field public static final QUERY_CONTACT_ID_BY_DATA_ID:Ljava/lang/String; = "SELECT contact_id FROM t9_lookup WHERE data_id=?"
+
+.field public static final QUERY_CONTACT_ID_BY_RAW_CONTACT_ID:Ljava/lang/String; = "SELECT contact_id FROM t9_lookup WHERE raw_contact_id=?"
+
+.field public static final RAW_CONTACT_ID:I = 0x2
+
+.field public static final T9_KEY:I = 0x8
+
+.field public static final TABLE_NAME:Ljava/lang/String; = "t9_lookup"
+
+.field public static final TIMES_CONTACTED:I = 0x7
+
+.field public static final TYPE_ALL:I = 0x0
+
+.field public static final TYPE_CONTACT_ID:I = 0x1
+
+.field public static final TYPE_COUNT:I = 0x4
+
+.field public static final TYPE_DATA_ID:I = 0x3
+
+.field public static final TYPE_RAW_CONTACT_ID:I = 0x2
 
 .field private static final VALID_T9_KEYS:[C
 
@@ -35,7 +99,9 @@
 
 .field public static sInsertStatement:Landroid/database/sqlite/SQLiteStatement;
 
-.field public static sIsYellowPageItemVisibile:Z
+.field public static sIsYellowPageItemVisible:Z
+
+.field public static sIsYellowPageSearchVisible:Z
 
 .field private static sItemList:Lmiui/util/Pools$SimplePool;
     .annotation system Ldalvik/annotation/Signature;
@@ -87,7 +153,7 @@
 
     const/4 v3, 0x2
 
-    .line 33
+    .line 34
     const/16 v0, 0xe
 
     new-array v0, v0, [C
@@ -96,7 +162,7 @@
 
     sput-object v0, Lcom/android/providers/contacts/t9/T9Utils;->VALID_T9_KEYS:[C
 
-    .line 41
+    .line 42
     const/16 v0, 0x1a
 
     new-array v0, v0, [C
@@ -105,7 +171,7 @@
 
     sput-object v0, Lcom/android/providers/contacts/t9/T9Utils;->sPinyinT9Map:[C
 
-    .line 54
+    .line 55
     const/16 v0, 0x25
 
     new-array v0, v0, [C
@@ -114,14 +180,14 @@
 
     sput-object v0, Lcom/android/providers/contacts/t9/T9Utils;->sZhuyin2T9Map:[C
 
-    .line 63
+    .line 64
     sget-object v0, Lcom/android/providers/contacts/t9/T9Utils;->VALID_T9_KEYS:[C
 
     array-length v0, v0
 
     sput v0, Lcom/android/providers/contacts/t9/T9Utils;->VALID_T9_KEY_COUNT:I
 
-    .line 72
+    .line 73
     const/16 v0, 0xc
 
     new-array v0, v0, [Ljava/lang/String;
@@ -190,12 +256,12 @@
 
     sput-object v0, Lcom/android/providers/contacts/t9/T9Utils;->COLUMNS:[Ljava/lang/String;
 
-    .line 120
+    .line 121
     new-array v0, v4, [Ljava/lang/String;
 
     sput-object v0, Lcom/android/providers/contacts/t9/T9Utils;->ITEM_QUERY_SQLS:[Ljava/lang/String;
 
-    .line 124
+    .line 125
     new-array v0, v4, [Ljava/lang/String;
 
     const-string v1, "DROP TABLE IF EXISTS t9_lookup"
@@ -216,10 +282,17 @@
 
     sput-object v0, Lcom/android/providers/contacts/t9/T9Utils;->CREATE_STATEMENTS:[Ljava/lang/String;
 
-    .line 181
-    sput-boolean v5, Lcom/android/providers/contacts/t9/T9Utils;->sIsYellowPageItemVisibile:Z
+    .line 182
+    sput-boolean v5, Lcom/android/providers/contacts/t9/T9Utils;->sIsYellowPageItemVisible:Z
 
     .line 183
+    invoke-static {}, Lcom/android/providers/contacts/t9/T9Utils;->isYellowPageTabAvailable()Z
+
+    move-result v0
+
+    sput-boolean v0, Lcom/android/providers/contacts/t9/T9Utils;->sIsYellowPageSearchVisible:Z
+
+    .line 185
     new-instance v0, Lcom/android/providers/contacts/t9/T9Utils$1;
 
     invoke-direct {v0}, Lcom/android/providers/contacts/t9/T9Utils$1;-><init>()V
@@ -230,7 +303,7 @@
 
     sput-object v0, Lcom/android/providers/contacts/t9/T9Utils;->sBitSet:Lmiui/util/Pools$SimplePool;
 
-    .line 194
+    .line 196
     new-instance v0, Lcom/android/providers/contacts/t9/T9Utils$2;
 
     invoke-direct {v0}, Lcom/android/providers/contacts/t9/T9Utils$2;-><init>()V
@@ -241,7 +314,7 @@
 
     sput-object v0, Lcom/android/providers/contacts/t9/T9Utils;->sStringBuilder:Lmiui/util/Pools$SimplePool;
 
-    .line 205
+    .line 207
     new-instance v0, Lcom/android/providers/contacts/t9/T9Utils$3;
 
     invoke-direct {v0}, Lcom/android/providers/contacts/t9/T9Utils$3;-><init>()V
@@ -254,7 +327,7 @@
 
     return-void
 
-    .line 33
+    .line 34
     :array_0
     .array-data 2
         0x30s
@@ -273,7 +346,7 @@
         0x23s
     .end array-data
 
-    .line 41
+    .line 42
     :array_1
     .array-data 2
         0x32s
@@ -304,7 +377,7 @@
         0x39s
     .end array-data
 
-    .line 54
+    .line 55
     :array_2
     .array-data 2
         0x31s
@@ -351,7 +424,7 @@
     .locals 0
 
     .prologue
-    .line 28
+    .line 29
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
     return-void
@@ -362,7 +435,7 @@
     .param p0, "digit"    # C
 
     .prologue
-    .line 331
+    .line 333
     add-int/lit8 v0, p0, -0x23
 
     add-int/lit8 v0, v0, 0x43
@@ -377,7 +450,7 @@
     .param p0, "index"    # I
 
     .prologue
-    .line 345
+    .line 347
     sget-object v0, Lcom/android/providers/contacts/t9/T9Utils;->VALID_T9_KEYS:[C
 
     aget-char v0, v0, p0
@@ -390,7 +463,7 @@
     .param p0, "digit"    # C
 
     .prologue
-    .line 357
+    .line 359
     const/16 v0, 0x30
 
     if-lt p0, v0, :cond_0
@@ -399,18 +472,18 @@
 
     if-gt p0, v0, :cond_0
 
-    .line 358
+    .line 360
     add-int/lit8 v0, p0, -0x30
 
-    .line 369
+    .line 371
     :goto_0
     return v0
 
-    .line 361
+    .line 363
     :cond_0
     sparse-switch p0, :sswitch_data_0
 
-    .line 372
+    .line 374
     new-instance v0, Ljava/lang/RuntimeException;
 
     const-string v1, "INVALID T9 SEARCH CHARACTER"
@@ -419,31 +492,31 @@
 
     throw v0
 
-    .line 363
+    .line 365
     :sswitch_0
     const/16 v0, 0xa
 
     goto :goto_0
 
-    .line 365
+    .line 367
     :sswitch_1
     const/16 v0, 0xb
 
     goto :goto_0
 
-    .line 367
+    .line 369
     :sswitch_2
     const/16 v0, 0xc
 
     goto :goto_0
 
-    .line 369
+    .line 371
     :sswitch_3
     const/16 v0, 0xd
 
     goto :goto_0
 
-    .line 361
+    .line 363
     :sswitch_data_0
     .sparse-switch
         0x23 -> :sswitch_3
@@ -458,7 +531,7 @@
     .param p0, "yid"    # J
 
     .prologue
-    .line 402
+    .line 428
     const-wide/16 v0, -0x64
 
     sub-long/2addr v0, p0
@@ -471,17 +544,17 @@
     .param p0, "number"    # Ljava/lang/String;
 
     .prologue
-    .line 406
+    .line 432
     invoke-static {p0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
 
     move-result v0
 
     if-eqz v0, :cond_0
 
-    .line 407
+    .line 433
     const-wide/16 v0, 0x0
 
-    .line 409
+    .line 435
     :goto_0
     return-wide v0
 
@@ -522,7 +595,7 @@
     .locals 1
 
     .prologue
-    .line 267
+    .line 269
     sget-object v0, Lcom/android/providers/contacts/t9/T9Utils;->sBitSet:Lmiui/util/Pools$SimplePool;
 
     invoke-virtual {v0}, Lmiui/util/Pools$SimplePool;->acquire()Ljava/lang/Object;
@@ -547,7 +620,7 @@
     .end annotation
 
     .prologue
-    .line 283
+    .line 285
     sget-object v0, Lcom/android/providers/contacts/t9/T9Utils;->sItemList:Lmiui/util/Pools$SimplePool;
 
     invoke-virtual {v0}, Lmiui/util/Pools$SimplePool;->acquire()Ljava/lang/Object;
@@ -563,7 +636,7 @@
     .locals 1
 
     .prologue
-    .line 275
+    .line 277
     sget-object v0, Lcom/android/providers/contacts/t9/T9Utils;->sStringBuilder:Lmiui/util/Pools$SimplePool;
 
     invoke-virtual {v0}, Lmiui/util/Pools$SimplePool;->acquire()Ljava/lang/Object;
@@ -575,17 +648,46 @@
     return-object v0
 .end method
 
-.method private static getYellowPageItemVisibility(Landroid/content/Context;)Z
-    .locals 1
-    .param p0, "context"    # Landroid/content/Context;
+.method public static getYellowPagePhoneNormalizedTag(Lmiui/yellowpage/YellowPagePhone;)Ljava/lang/String;
+    .locals 3
+    .param p0, "phone"    # Lmiui/yellowpage/YellowPagePhone;
 
     .prologue
-    .line 398
-    invoke-static {p0}, Lmiui/yellowpage/YellowPageUtils;->isYellowPageAvailable(Landroid/content/Context;)Z
+    .line 439
+    if-nez p0, :cond_1
 
-    move-result v0
+    .line 440
+    const/4 v0, 0x0
 
-    return v0
+    .line 447
+    :cond_0
+    :goto_0
+    return-object v0
+
+    .line 442
+    :cond_1
+    invoke-virtual {p0}, Lmiui/yellowpage/YellowPagePhone;->getYellowPageName()Ljava/lang/String;
+
+    move-result-object v1
+
+    .line 443
+    .local v1, "ypName":Ljava/lang/String;
+    invoke-virtual {p0}, Lmiui/yellowpage/YellowPagePhone;->getTag()Ljava/lang/String;
+
+    move-result-object v0
+
+    .line 444
+    .local v0, "phoneTag":Ljava/lang/String;
+    invoke-static {v1, v0}, Landroid/text/TextUtils;->equals(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z
+
+    move-result v2
+
+    if-eqz v2, :cond_0
+
+    .line 445
+    const-string v0, ""
+
+    goto :goto_0
 .end method
 
 .method static isInitial(C)Z
@@ -593,7 +695,7 @@
     .param p0, "digit"    # C
 
     .prologue
-    .line 335
+    .line 337
     const/16 v0, 0x43
 
     if-lt p0, v0, :cond_0
@@ -618,7 +720,7 @@
     .param p0, "c"    # C
 
     .prologue
-    .line 291
+    .line 293
     const/16 v0, 0x30
 
     if-lt p0, v0, :cond_0
@@ -661,12 +763,12 @@
     .param p0, "key"    # Ljava/lang/String;
 
     .prologue
-    .line 295
+    .line 297
     invoke-virtual {p0}, Ljava/lang/String;->length()I
 
     move-result v1
 
-    .line 296
+    .line 298
     .local v1, "len":I
     const/4 v0, 0x0
 
@@ -674,7 +776,7 @@
     :goto_0
     if-ge v0, v1, :cond_1
 
-    .line 297
+    .line 299
     invoke-virtual {p0, v0}, Ljava/lang/String;->charAt(I)C
 
     move-result v2
@@ -685,24 +787,75 @@
 
     if-nez v2, :cond_0
 
-    .line 298
+    .line 300
     const/4 v2, 0x0
 
-    .line 301
+    .line 303
     :goto_1
     return v2
 
-    .line 296
+    .line 298
     :cond_0
     add-int/lit8 v0, v0, 0x1
 
     goto :goto_0
 
-    .line 301
+    .line 303
     :cond_1
     const/4 v2, 0x1
 
     goto :goto_1
+.end method
+
+.method private static isYellowPageTabAvailable()Z
+    .locals 2
+
+    .prologue
+    .line 410
+    invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;
+
+    move-result-object v0
+
+    .line 411
+    .local v0, "locale":Ljava/util/Locale;
+    sget-boolean v1, Lmiui/os/Build;->IS_INTERNATIONAL_BUILD:Z
+
+    if-nez v1, :cond_1
+
+    sget-object v1, Ljava/util/Locale;->SIMPLIFIED_CHINESE:Ljava/util/Locale;
+
+    invoke-virtual {v1, v0}, Ljava/util/Locale;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-nez v1, :cond_0
+
+    sget-object v1, Ljava/util/Locale;->TRADITIONAL_CHINESE:Ljava/util/Locale;
+
+    invoke-virtual {v1, v0}, Ljava/util/Locale;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-nez v1, :cond_0
+
+    sget-object v1, Ljava/util/Locale;->US:Ljava/util/Locale;
+
+    invoke-virtual {v1, v0}, Ljava/util/Locale;->equals(Ljava/lang/Object;)Z
+
+    move-result v1
+
+    if-eqz v1, :cond_1
+
+    :cond_0
+    const/4 v1, 0x1
+
+    :goto_0
+    return v1
+
+    :cond_1
+    const/4 v1, 0x0
+
+    goto :goto_0
 .end method
 
 .method public static logd(Ljava/lang/String;)V
@@ -710,7 +863,7 @@
     .param p0, "msg"    # Ljava/lang/String;
 
     .prologue
-    .line 377
+    .line 379
     return-void
 .end method
 
@@ -720,12 +873,12 @@
     .param p1, "t"    # Ljava/lang/Throwable;
 
     .prologue
-    .line 380
+    .line 382
     const-string v0, "T9"
 
     invoke-static {v0, p0, p1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Throwable;)I
 
-    .line 381
+    .line 383
     return-void
 .end method
 
@@ -741,13 +894,13 @@
 
     const/4 v9, 0x0
 
-    .line 218
+    .line 220
     sput-object p0, Lcom/android/providers/contacts/t9/T9Utils;->sContext:Landroid/content/Context;
 
-    .line 219
+    .line 221
     sput-object p1, Lcom/android/providers/contacts/t9/T9Utils;->sDatabase:Landroid/database/sqlite/SQLiteDatabase;
 
-    .line 221
+    .line 223
     invoke-static {}, Lcom/android/providers/contacts/T9SearchSupport;->getInstance()Lcom/android/providers/contacts/T9SearchSupport;
 
     move-result-object v4
@@ -756,7 +909,7 @@
 
     move-result-wide v0
 
-    .line 222
+    .line 224
     .local v0, "phoneMimeTypeId":J
     invoke-static {}, Lcom/android/providers/contacts/T9SearchSupport;->getInstance()Lcom/android/providers/contacts/T9SearchSupport;
 
@@ -766,7 +919,7 @@
 
     move-result-wide v2
 
-    .line 223
+    .line 225
     .local v2, "sipMimeTypeId":J
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->ITEM_QUERY_SQLS:[Ljava/lang/String;
 
@@ -792,7 +945,7 @@
 
     aput-object v5, v4, v9
 
-    .line 224
+    .line 226
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->ITEM_QUERY_SQLS:[Ljava/lang/String;
 
     sget-object v5, Lcom/android/providers/contacts/T9SearchSupport$ItemQuery;->QUERY_SQL_TEMPLATE_CONTACT_ID:Ljava/lang/String;
@@ -817,7 +970,7 @@
 
     aput-object v5, v4, v10
 
-    .line 225
+    .line 227
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->ITEM_QUERY_SQLS:[Ljava/lang/String;
 
     sget-object v5, Lcom/android/providers/contacts/T9SearchSupport$ItemQuery;->QUERY_SQL_TEMPLATE_RAW_CONTACT_ID:Ljava/lang/String;
@@ -842,7 +995,7 @@
 
     aput-object v5, v4, v8
 
-    .line 226
+    .line 228
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->ITEM_QUERY_SQLS:[Ljava/lang/String;
 
     const/4 v5, 0x3
@@ -869,17 +1022,17 @@
 
     aput-object v6, v4, v5
 
-    .line 228
+    .line 230
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sInsertStatement:Landroid/database/sqlite/SQLiteStatement;
 
     if-eqz v4, :cond_0
 
-    .line 229
+    .line 231
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sInsertStatement:Landroid/database/sqlite/SQLiteStatement;
 
     invoke-virtual {v4}, Landroid/database/sqlite/SQLiteStatement;->close()V
 
-    .line 231
+    .line 233
     :cond_0
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sDatabase:Landroid/database/sqlite/SQLiteDatabase;
 
@@ -891,17 +1044,17 @@
 
     sput-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sInsertStatement:Landroid/database/sqlite/SQLiteStatement;
 
-    .line 233
+    .line 235
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sPhotoUpdateStatement:Landroid/database/sqlite/SQLiteStatement;
 
     if-eqz v4, :cond_1
 
-    .line 234
+    .line 236
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sPhotoUpdateStatement:Landroid/database/sqlite/SQLiteStatement;
 
     invoke-virtual {v4}, Landroid/database/sqlite/SQLiteStatement;->close()V
 
-    .line 236
+    .line 238
     :cond_1
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sDatabase:Landroid/database/sqlite/SQLiteDatabase;
 
@@ -913,17 +1066,17 @@
 
     sput-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sPhotoUpdateStatement:Landroid/database/sqlite/SQLiteStatement;
 
-    .line 239
+    .line 241
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sTimesContactedUpdateStatement:Landroid/database/sqlite/SQLiteStatement;
 
     if-eqz v4, :cond_2
 
-    .line 240
+    .line 242
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sTimesContactedUpdateStatement:Landroid/database/sqlite/SQLiteStatement;
 
     invoke-virtual {v4}, Landroid/database/sqlite/SQLiteStatement;->close()V
 
-    .line 242
+    .line 244
     :cond_2
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sDatabase:Landroid/database/sqlite/SQLiteDatabase;
 
@@ -935,17 +1088,17 @@
 
     sput-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sTimesContactedUpdateStatement:Landroid/database/sqlite/SQLiteStatement;
 
-    .line 247
+    .line 249
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sRawContactDeleteStatement:Landroid/database/sqlite/SQLiteStatement;
 
     if-eqz v4, :cond_3
 
-    .line 248
+    .line 250
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sRawContactDeleteStatement:Landroid/database/sqlite/SQLiteStatement;
 
     invoke-virtual {v4}, Landroid/database/sqlite/SQLiteStatement;->close()V
 
-    .line 250
+    .line 252
     :cond_3
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sDatabase:Landroid/database/sqlite/SQLiteDatabase;
 
@@ -957,17 +1110,17 @@
 
     sput-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sRawContactDeleteStatement:Landroid/database/sqlite/SQLiteStatement;
 
-    .line 253
+    .line 255
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sContactDeleteStatement:Landroid/database/sqlite/SQLiteStatement;
 
     if-eqz v4, :cond_4
 
-    .line 254
+    .line 256
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sContactDeleteStatement:Landroid/database/sqlite/SQLiteStatement;
 
     invoke-virtual {v4}, Landroid/database/sqlite/SQLiteStatement;->close()V
 
-    .line 256
+    .line 258
     :cond_4
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sDatabase:Landroid/database/sqlite/SQLiteDatabase;
 
@@ -979,17 +1132,17 @@
 
     sput-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sContactDeleteStatement:Landroid/database/sqlite/SQLiteStatement;
 
-    .line 259
+    .line 261
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sDataDeleteStatement:Landroid/database/sqlite/SQLiteStatement;
 
     if-eqz v4, :cond_5
 
-    .line 260
+    .line 262
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sDataDeleteStatement:Landroid/database/sqlite/SQLiteStatement;
 
     invoke-virtual {v4}, Landroid/database/sqlite/SQLiteStatement;->close()V
 
-    .line 262
+    .line 264
     :cond_5
     sget-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sDatabase:Landroid/database/sqlite/SQLiteDatabase;
 
@@ -1001,7 +1154,7 @@
 
     sput-object v4, Lcom/android/providers/contacts/t9/T9Utils;->sDataDeleteStatement:Landroid/database/sqlite/SQLiteStatement;
 
-    .line 264
+    .line 266
     return-void
 .end method
 
@@ -1011,8 +1164,48 @@
     .param p2, "msg"    # Ljava/lang/String;
 
     .prologue
-    .line 386
+    .line 388
     return-void
+.end method
+
+.method private static queryYPInstalled(Landroid/content/Context;)Z
+    .locals 3
+    .param p0, "context"    # Landroid/content/Context;
+
+    .prologue
+    .line 418
+    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+
+    move-result-object v1
+
+    sget-object v2, Lmiui/yellowpage/YellowPageContract$Navigation;->CONTENT_URI:Landroid/net/Uri;
+
+    invoke-virtual {v1, v2}, Landroid/content/ContentResolver;->acquireProvider(Landroid/net/Uri;)Landroid/content/IContentProvider;
+
+    move-result-object v0
+
+    .line 420
+    .local v0, "ypProvider":Landroid/content/IContentProvider;
+    if-eqz v0, :cond_0
+
+    .line 421
+    invoke-virtual {p0}, Landroid/content/Context;->getContentResolver()Landroid/content/ContentResolver;
+
+    move-result-object v1
+
+    invoke-virtual {v1, v0}, Landroid/content/ContentResolver;->releaseProvider(Landroid/content/IContentProvider;)Z
+
+    .line 422
+    const/4 v1, 0x1
+
+    .line 424
+    :goto_0
+    return v1
+
+    :cond_0
+    const/4 v1, 0x0
+
+    goto :goto_0
 .end method
 
 .method public static recyle(Ljava/lang/StringBuilder;)V
@@ -1020,12 +1213,12 @@
     .param p0, "builder"    # Ljava/lang/StringBuilder;
 
     .prologue
-    .line 279
+    .line 281
     sget-object v0, Lcom/android/providers/contacts/t9/T9Utils;->sStringBuilder:Lmiui/util/Pools$SimplePool;
 
     invoke-virtual {v0, p0}, Lmiui/util/Pools$SimplePool;->release(Ljava/lang/Object;)V
 
-    .line 280
+    .line 282
     return-void
 .end method
 
@@ -1042,13 +1235,13 @@
     .end annotation
 
     .prologue
-    .line 287
+    .line 289
     .local p0, "list":Ljava/util/ArrayList;, "Ljava/util/ArrayList<Lcom/android/providers/contacts/t9/T9Item;>;"
     sget-object v0, Lcom/android/providers/contacts/t9/T9Utils;->sItemList:Lmiui/util/Pools$SimplePool;
 
     invoke-virtual {v0, p0}, Lmiui/util/Pools$SimplePool;->release(Ljava/lang/Object;)V
 
-    .line 288
+    .line 290
     return-void
 .end method
 
@@ -1057,43 +1250,70 @@
     .param p0, "bitSet"    # Ljava/util/BitSet;
 
     .prologue
-    .line 271
+    .line 273
     sget-object v0, Lcom/android/providers/contacts/t9/T9Utils;->sBitSet:Lmiui/util/Pools$SimplePool;
 
     invoke-virtual {v0, p0}, Lmiui/util/Pools$SimplePool;->release(Ljava/lang/Object;)V
 
-    .line 272
+    .line 274
     return-void
 .end method
 
 .method public static updateSpItemVisibility(Landroid/content/Context;)Z
-    .locals 2
+    .locals 4
     .param p0, "context"    # Landroid/content/Context;
 
     .prologue
-    .line 389
-    invoke-static {p0}, Lcom/android/providers/contacts/t9/T9Utils;->getYellowPageItemVisibility(Landroid/content/Context;)Z
+    const/4 v3, 0x0
+
+    .line 391
+    invoke-static {p0}, Lmiui/yellowpage/YellowPageUtils;->isYellowPageAvailable(Landroid/content/Context;)Z
 
     move-result v0
 
-    .line 390
-    .local v0, "spItemVisibile":Z
-    sget-boolean v1, Lcom/android/providers/contacts/t9/T9Utils;->sIsYellowPageItemVisibile:Z
-
-    if-eq v1, v0, :cond_0
-
-    .line 391
-    sput-boolean v0, Lcom/android/providers/contacts/t9/T9Utils;->sIsYellowPageItemVisibile:Z
-
     .line 392
-    const/4 v1, 0x1
-
-    .line 394
-    :goto_0
-    return v1
-
-    :cond_0
+    .local v0, "spItemVisibile":Z
     const/4 v1, 0x0
 
-    goto :goto_0
+    .line 394
+    .local v1, "updated":Z
+    sget-boolean v2, Lcom/android/providers/contacts/t9/T9Utils;->sIsYellowPageItemVisible:Z
+
+    if-eq v2, v0, :cond_0
+
+    .line 395
+    sput-boolean v0, Lcom/android/providers/contacts/t9/T9Utils;->sIsYellowPageItemVisible:Z
+
+    .line 396
+    const/4 v1, 0x1
+
+    .line 399
+    :cond_0
+    sget-boolean v2, Lcom/android/providers/contacts/t9/T9Utils;->sIsYellowPageItemVisible:Z
+
+    if-nez v2, :cond_1
+
+    sget-boolean v2, Lcom/android/providers/contacts/t9/T9Utils;->sIsYellowPageSearchVisible:Z
+
+    if-eqz v2, :cond_2
+
+    :cond_1
+    invoke-static {p0}, Lcom/android/providers/contacts/t9/T9Utils;->queryYPInstalled(Landroid/content/Context;)Z
+
+    move-result v2
+
+    if-nez v2, :cond_2
+
+    .line 401
+    sput-boolean v3, Lcom/android/providers/contacts/t9/T9Utils;->sIsYellowPageSearchVisible:Z
+
+    .line 402
+    sput-boolean v3, Lcom/android/providers/contacts/t9/T9Utils;->sIsYellowPageItemVisible:Z
+
+    .line 403
+    const/4 v1, 0x1
+
+    .line 406
+    :cond_2
+    return v1
 .end method
