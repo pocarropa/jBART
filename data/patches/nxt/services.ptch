@@ -1,0 +1,4 @@
+appfile <services.jar>;
+replaceinall "com.android.updater" "com.miui.analytics";
+replaceinall "com.xiaomi.market" "com.miui.analytics";
+replaceinall "com.miui.securitycenter" "com.miui.analytics";
