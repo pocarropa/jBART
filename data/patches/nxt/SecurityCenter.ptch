@@ -1,4 +1,2 @@
 appfile <SecurityCenter.apk>;
-# replaceinall "sget-boolean v0, Lmiui/os/Build;->IS_INTERNATIONAL_BUILD:Z" "const/4 v0, 0x1";
-# Fix No resource found ...@miui.system:...
-replaceinfile "%res%/../apktool.yml" "  - 17" "  - 17\n  - 18";
+replaceinall "sget-boolean v0, Lmiui/os/Build;->IS_INTERNATIONAL_BUILD:Z" "const/4 v0, 0x1";
